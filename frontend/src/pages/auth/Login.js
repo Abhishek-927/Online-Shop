@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/auth";
 
 const Login = () => {
   const nevigate = useNavigate();
+  const location = useLocation();
+
+  const { auth, setAuth } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -27,14 +31,18 @@ const Login = () => {
         `${process.env.REACT_APP_BASE_URL}/api/v1/auth/login`,
         formData
       );
-      console.log("by me", responst);
       if (responst.data.success) {
         toast.success("Login Successful");
-        nevigate("/");
+        localStorage.setItem("token", JSON.stringify(responst.data));
+        setAuth({
+          ...auth,
+          user: responst.data.user,
+          token: responst.data.token,
+        });
+        nevigate(location.state || "/");
       } else {
         toast.error(responst.data.msg);
       }
-      console.log("at end");
     } catch (error) {
       console.log(error);
       toast.error("Somthing went wrong !!!! DDFSD");

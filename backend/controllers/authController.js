@@ -23,7 +23,7 @@ const signUp = async (req, res) => {
       }
       const hashedPassword = await hashPassword(password);
       // storing user
-      const user = await User.create({
+      const newUser = await User.create({
         name,
         email,
         phone,
@@ -31,10 +31,16 @@ const signUp = async (req, res) => {
         password: hashedPassword,
       });
       const token = generateToken({ email });
-      user.save(); //save in database
+      newUser.save(); //save in database
       return res.status(201).json({
         success: true,
         msg: "signup success",
+        user: {
+          name: newUser.name,
+          email: newUser.email,
+          phone: newUser.phone,
+          address: newUser.address,
+        },
         token,
       });
     } else {
@@ -76,6 +82,12 @@ const login = async (req, res) => {
         success: true,
         msg: "login success",
         token,
+        user: {
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
+        },
       });
     } catch (error) {
       res.status(500).json({

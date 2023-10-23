@@ -20,6 +20,10 @@ app.use(cors());
 
 //all api call
 app.use("/api/v1/auth", require("./routes/authRoute"));
+app.use("/api/v1/category", require("./routes/categoryRoute"));
+app.use("/api/v1/product", require("./routes/productRoute"));
+
+//testing router --  remove after completion of development
 app.get("/test", signinRequired, isAdmin, (req, res) => {
   res.send("got it");
 });

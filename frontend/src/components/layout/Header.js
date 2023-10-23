@@ -1,8 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { BiLogoShopify } from "react-icons/bi";
+import { useAuth } from "../../context/auth";
+import { toast } from "react-toastify";
 
 const Header = () => {
+  const { auth, setAuth } = useAuth();
+  const handleLogout = () => {
+    setAuth({
+      ...auth,
+      user: null,
+      token: "",
+    });
+    toast.success("Logout Done");
+    localStorage.removeItem("token");
+  };
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark ">
@@ -34,16 +46,32 @@ const Header = () => {
                   About
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/login">
-                  Login
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/signup">
-                  Resister
-                </Link>
-              </li>
+              {!auth.user ? (
+                <>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/login">
+                      Login
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/signup">
+                      Resister
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link"
+                      to="/login"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>
