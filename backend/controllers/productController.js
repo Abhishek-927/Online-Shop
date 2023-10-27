@@ -6,8 +6,11 @@ const slugify = require("slugify");
 //creating product
 const createProductController = async (req, res) => {
   try {
-    const { name, description, price, category, quantity } = req.fields;
+    const { name, description, price, category, quantity, shipping } =
+      req.fields;
     const { photo } = req.files;
+
+    console.log(shipping);
 
     switch (true) {
       case !name:
@@ -40,15 +43,15 @@ const createProductController = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      msg: "success",
+      msg: "product created successful",
       product,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      error,
       msg: "error inside creating product",
+      error,
     });
   }
 };
@@ -73,8 +76,8 @@ const getProductController = async (req, res) => {
     console.log(error);
     res.status(500).send({
       success: false,
-      error,
       msg: "error inside getting All product",
+      error,
     });
   }
 };
@@ -96,8 +99,8 @@ const singleProductController = async (req, res) => {
     console.log(error);
     res.status(500).send({
       success: false,
-      error,
       msg: "error inside getting single product",
+      error,
     });
   }
 };
@@ -105,10 +108,7 @@ const singleProductController = async (req, res) => {
 //get photo product
 const getPhotoController = async (req, res) => {
   try {
-    const product = await productModel
-      .findById({ _id: req.params.id })
-      .select("photo")
-      .populate("category");
+    const product = await productModel.findById(req.params.id).select("photo");
 
     if (product && product.photo.data) {
       res.set("Content-type", product.photo.contentType);
@@ -120,8 +120,8 @@ const getPhotoController = async (req, res) => {
     console.log(error);
     res.status(500).send({
       success: false,
-      error,
       msg: "error inside getting single product",
+      error,
     });
   }
 };
@@ -167,15 +167,15 @@ const updateProductController = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      msg: "success",
+      msg: "product updated successfully",
       product,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      error,
       msg: "error inside update product",
+      error,
     });
   }
 };
@@ -192,8 +192,129 @@ const deleteProductController = async (req, res) => {
     console.log(error);
     res.status(500).send({
       success: false,
-      error,
       msg: "error inside getting single product",
+      error,
+    });
+  }
+};
+
+//filter product
+const productFilterController = async (req, res) => {
+  try {
+    const { checked, radio } = req.body;
+    console.log("sfsdf", checked, radio);
+    let args = {};
+    if (checked?.length > 0) {
+      args.category = checked;
+    }
+    if (radio?.length) {
+      args.price = { $gte: radio[0], $lte: radio[1] };
+    }
+
+    const product = await productModel.find(args);
+
+    res.send({
+      success: true,
+      product,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      msg: "error inside filter product",
+      error,
+    });
+  }
+};
+
+const productCountController = async (req, res) => {
+  try {
+    const count = await productModel.find({}).estimatedDocumentCount();
+    res.send({
+      success: true,
+      count,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      msg: "error in product count",
+      error,
+    });
+  }
+};
+
+const productListController = async (req, res) => {
+  try {
+    const perPage = 6;
+    const page = req.params.page || 1;
+    const products = await productModel
+      .find({})
+      .select("-photo")
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .sort({ createAt: -1 });
+    res.send({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      msg: "error in per page",
+      error,
+    });
+  }
+};
+
+//search product
+const searchProductController = async (req, res) => {
+  try {
+    const { keyword } = req.params;
+    const products = await productModel
+      .find({
+        $or: [
+          { name: { $regex: keyword, $options: "i" } },
+          { description: { $regex: keyword, $options: "i" } },
+        ],
+      })
+      .select("-photo");
+    res.json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      msg: "error in search product",
+      error,
+    });
+  }
+};
+
+const getSimilarProductController = async (req, res) => {
+  try {
+    const { pid, cid } = req.params;
+    const products = await productModel
+      .find({
+        category: cid,
+        _id: { $ne: pid },
+      })
+      .select("-photo")
+      .limit(3)
+      .populate("category");
+    res.json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      msg: "error in getting releted product",
+      error,
     });
   }
 };
@@ -205,4 +326,9 @@ module.exports = {
   getPhotoController,
   deleteProductController,
   updateProductController,
+  productFilterController,
+  productCountController,
+  productListController,
+  searchProductController,
+  getSimilarProductController,
 };

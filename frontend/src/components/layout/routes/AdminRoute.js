@@ -6,7 +6,7 @@ import Spinner from "../../Spinner";
 
 const PrivateAdminRoute = () => {
   const [ok, setOk] = useState(false);
-  const { auth, setAuth } = useAuth();
+  const { auth } = useAuth();
 
   useEffect(() => {
     const authCheck = async () => {

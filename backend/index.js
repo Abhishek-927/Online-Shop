@@ -10,7 +10,7 @@ const connectToDB = require("./db");
 //config with environment veriable
 dotenv.config();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8000;
 const app = express();
 connectToDB(); //connecting to database
 
@@ -24,14 +24,14 @@ app.use("/api/v1/category", require("./routes/categoryRoute"));
 app.use("/api/v1/product", require("./routes/productRoute"));
 
 //testing router --  remove after completion of development
-app.get("/test", signinRequired, isAdmin, (req, res) => {
-  res.send("got it");
-});
+// app.get("/test", signinRequired, isAdmin, (req, res) => {
+//   res.send("got it");
+// });
 
-//api request
-app.get("/", (req, res) => {
-  res.send("welcome ");
-});
+//rest api request
+// app.get("/", (req, res) => {
+//   res.send("welcome ");
+// });
 
 //listening on server
 app.listen(PORT, () => {

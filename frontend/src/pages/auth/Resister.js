@@ -20,6 +20,7 @@ const Resister = () => {
       [name]: value,
     });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
@@ -39,6 +40,7 @@ const Resister = () => {
       toast.error("Somthing went wrong");
     }
   };
+
   return (
     <div className="signup-form">
       <h2>Resister Page</h2>

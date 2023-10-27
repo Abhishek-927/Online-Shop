@@ -5,6 +5,8 @@ const { signinRequired, isAdmin } = require("../middlewares/authMiddle");
 
 const router = express.Router();
 
+// ROUTING
+
 //creating new user -  signup
 router.post(
   "/createuser",

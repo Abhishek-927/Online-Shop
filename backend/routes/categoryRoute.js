@@ -27,15 +27,10 @@ router.put(
 );
 
 //get all categories
-router.get("/get-categories", signinRequired, isAdmin, getCategoryController);
+router.get("/get-categories", getCategoryController);
 
 //get single category
-router.get(
-  "/single-category/:slug",
-  signinRequired,
-  isAdmin,
-  singleCategoryController
-);
+router.get("/single-category/:slug", singleCategoryController);
 
 //delete category
 router.delete(

@@ -40,6 +40,7 @@ const signUp = async (req, res) => {
           email: newUser.email,
           phone: newUser.phone,
           address: newUser.address,
+          role: newUser.role,
         },
         token,
       });
@@ -87,12 +88,13 @@ const login = async (req, res) => {
           email: user.email,
           phone: user.phone,
           address: user.address,
+          role: user.role,
         },
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        msg: "Internal server error",
+        msg: "Internal server error while login",
         error: error,
       });
     }

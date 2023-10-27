@@ -7,19 +7,25 @@ const AdminManu = () => {
       <h4>Admin Panel</h4>
       <div className="list-group">
         <Link
-          to="/deshboard/admin/create-category"
+          to="/dashboard/admin/create-category"
           className="list-group-item list-group-item-action"
         >
           Create Category
         </Link>
         <Link
-          to="/deshboard/admin/create-product"
+          to="/dashboard/admin/create-product"
           className="list-group-item list-group-item-action"
         >
           Create Product
         </Link>
         <Link
-          to="/deshboard/admin/users"
+          to="/dashboard/admin/products"
+          className="list-group-item list-group-item-action"
+        >
+          Products
+        </Link>
+        <Link
+          to="/dashboard/admin/users"
           className="list-group-item list-group-item-action"
         >
           Users

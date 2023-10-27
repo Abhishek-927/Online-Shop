@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+//Protected Router Token Based
+
 const signinRequired = (req, res, next) => {
   const token = req.headers.authorization;
   if (!token) {
@@ -16,6 +18,7 @@ const signinRequired = (req, res, next) => {
   }
 };
 
+//Admin Access
 const isAdmin = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.user.email });

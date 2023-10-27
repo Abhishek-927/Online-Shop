@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema({
     contentType: String,
   },
   shipping: {
-    type: String,
+    type: Boolean,
   },
   category: {
     type: mongoose.Schema.Types.ObjectId,

@@ -3,10 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const Spinner = ({ path = "login" }) => {
   //to get recent history of user tab
-  const location = useLocation();
 
+  const location = useLocation();
   const navigate = useNavigate();
   const [counter, setCounter] = useState(3);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCounter((count) => --count);

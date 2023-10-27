@@ -20,27 +20,33 @@ import CreateProduct from "./pages/admin/CreateProduct";
 import Users from "./pages/admin/Users";
 import Order from "./pages/user/Order";
 import Profile from "./pages/user/Profile";
-import { CategoryProvider } from "./context/CategoryContext";
+import Products from "./pages/admin/Products";
+import UpdateProduct from "./pages/admin/UpdateProduct";
+import { SearchProvider } from "./context/searchContext";
+import Search from "./pages/Search";
+import ProductDetails from "./pages/ProductDetails";
 
 function App() {
   return (
     <AuthProvider>
-      <CategoryProvider>
+      <SearchProvider>
         <Router>
           <Header />
           <ToastContainer />
           <Routes>
             <Route path="/" element={<Home />}></Route>
-            <Route path="/deshboard" element={<PrivateAdminRoute />}>
+            <Route path="/dashboard" element={<PrivateAdminRoute />}>
               <Route path="admin" element={<AdminDeshboard />} />
               <Route
                 path="admin/create-category"
                 element={<CreateCategory />}
               />
               <Route path="admin/create-product" element={<CreateProduct />} />
+              <Route path="admin/product/:slug" element={<UpdateProduct />} />
+              <Route path="admin/products" element={<Products />} />
               <Route path="admin/users" element={<Users />} />
             </Route>
-            <Route path="/deshboard" element={<Private />}>
+            <Route path="/dashboard" element={<Private />}>
               <Route path="user" element={<Deshboard />}></Route>
               <Route path="user/order" element={<Order />}></Route>
               <Route path="user/profile" element={<Profile />}></Route>
@@ -50,11 +56,13 @@ function App() {
             <Route path="/policy" element={<Policy />}></Route>
             <Route path="/signup" element={<Resister />}></Route>
             <Route path="/login" element={<Login />}></Route>
+            <Route path="/search" element={<Search />}></Route>
+            <Route path="/product/:slug" element={<ProductDetails />}></Route>
             <Route path="*" element={<PageNotFound />}></Route>
           </Routes>
           <Footer />
         </Router>
-      </CategoryProvider>
+      </SearchProvider>
     </AuthProvider>
   );
 }

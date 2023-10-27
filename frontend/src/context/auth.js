@@ -6,7 +6,7 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({
-    user: "",
+    user: null,
     token: "",
   });
 
@@ -22,6 +22,7 @@ const AuthProvider = ({ children }) => {
         token: parseData.token,
       });
     }
+    // eslint-disable-next-line
   }, []);
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>

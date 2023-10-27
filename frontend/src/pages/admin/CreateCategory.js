@@ -13,10 +13,11 @@ const CreateCategory = () => {
   const [selected, setSelected] = useState(null);
   const [updateName, setUpdateName] = useState(null);
 
+  //get all category
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/api/v1/category/get-categories`
+        `${base}/api/v1/category/get-categories`
       );
       setCategory(data.allCategories);
     } catch (error) {
@@ -25,6 +26,7 @@ const CreateCategory = () => {
     }
   };
 
+  //handle form
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -33,7 +35,8 @@ const CreateCategory = () => {
         { name }
       );
       if (data.success) {
-        toast.success("Created");
+        toast.success(`${name} is created`);
+        setName("");
         getAllCategory();
       } else {
         toast.error("some error in data");
@@ -48,6 +51,7 @@ const CreateCategory = () => {
     getAllCategory();
   }, []);
 
+  //handle delete button
   const handleDelete = async (id) => {
     try {
       const { data } = await axios.delete(
@@ -60,6 +64,8 @@ const CreateCategory = () => {
       toast.error("error in update");
     }
   };
+
+  //handle edit button
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
