@@ -42,6 +42,7 @@ const signUp = async (req, res) => {
           phone: newUser.phone,
           address: newUser.address,
           role: newUser.role,
+          _id: newUser._id,
         },
         token,
       });
@@ -90,6 +91,7 @@ const login = async (req, res) => {
           phone: user.phone,
           address: user.address,
           role: user.role,
+          _id: user._id,
         },
       });
     } catch (error) {
@@ -137,8 +139,9 @@ const updateProfileController = async (req, res) => {
 
 const getOrderController = async (req, res) => {
   try {
+    const { id } = req.params;
     const orders = await orderModel
-      .find({ buyer: req.user._id })
+      .find({ buyer: id })
       .populate("products", "-photo")
       .populate("buyer", "name");
 

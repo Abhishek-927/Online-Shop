@@ -1,4 +1,6 @@
 const express = require("express");
+const { body } = require("express-validator");
+
 const {
   signUp,
   login,
@@ -8,9 +10,7 @@ const {
   orderStatusController,
   getAllUserController,
 } = require("../controllers/authController");
-const { body } = require("express-validator");
 const { signinRequired, isAdmin } = require("../middlewares/authMiddle");
-const { route } = require("./productRoute");
 
 const router = express.Router();
 
@@ -60,16 +60,16 @@ router.get("/admin-auth", signinRequired, isAdmin, (req, res) => {
   res.status(200).json({ ok: true });
 });
 
-//update profiles
+// 5. update profiles
 router.put("/profile-update", signinRequired, updateProfileController);
 
-// 5. get all users
+// 6. get all users
 router.get("/all-users", signinRequired, isAdmin, getAllUserController);
 
 //Orders Routes
 
 //get single order
-router.get("/orders", signinRequired, getOrderController);
+router.get("/orders/:id", signinRequired, getOrderController);
 
 //get all orders
 router.get("/all-orders", signinRequired, isAdmin, getAllOrderController);

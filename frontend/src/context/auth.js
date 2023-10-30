@@ -10,6 +10,8 @@ const AuthProvider = ({ children }) => {
     token: "",
   });
 
+  const [temp, setTemp] = useState({});
+
   axios.defaults.headers.common["Authorization"] = auth?.token;
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const AuthProvider = ({ children }) => {
     // eslint-disable-next-line
   }, []);
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={{ auth, setAuth, temp, setTemp }}>
       {children}
     </AuthContext.Provider>
   );

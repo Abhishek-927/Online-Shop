@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 
+import { useCard } from "../context/cardContext";
+
 const base = process.env.REACT_APP_BASE_URL;
+
 const Category = () => {
   const navigate = useNavigate();
+  const { card, setCard } = useCard();
   const params = useParams();
   const [category, setCategory] = useState([]);
   const [products, setProducts] = useState([]);
+  let temp = {};
 
   const getProductViaCategory = async () => {
     try {
@@ -27,33 +33,46 @@ const Category = () => {
 
   return (
     <div className="container">
-      <h4 className="text-center">Category - {category.name}</h4>
-      <h5 className="text-center">{products.length} Result Found</h5>
-      <div className="row">
+      <div className="my-4">
+        <h3 className="text-center mb-2">Category - {category.name}</h3>
+        <h5 className="text-center">{products.length} Result Found</h5>
+      </div>
+      <div className="d-flex flex-wrap gap-25px">
         {products.map((pro) => {
           return (
-            <div className="col-md-3" key={pro._id}>
-              <div className="card">
-                <img
-                  style={{ width: "18rem" }}
-                  src={`${base}/api/v1/product/product-photo/${pro._id}`}
-                  className="card-img-top"
-                  alt="product photo"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">{pro.name}</h5>
-                  <p className="card-text">{pro.description}</p>
-                  <p className="card-text">{pro.price}</p>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => {
-                      navigate(`/product/${pro.slug}`);
-                    }}
-                  >
-                    More Details
-                  </button>
-                  <button className="btn btn-primary ms-1">Add to Card</button>
-                </div>
+            <div className="card" key={pro._id}>
+              <img
+                src={`${base}/api/v1/product/product-photo/${pro._id}`}
+                className="card-img-top card-img"
+                alt="product photo"
+              />
+              <div className="card-body">
+                <h5 className="card-title">{pro.name}</h5>
+                <p className="card-text">{pro.description}</p>
+                <p className="card-text">{pro.price}</p>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    navigate(`/product/${pro.slug}`);
+                  }}
+                >
+                  More Details
+                </button>
+                <button
+                  className="btn btn-secondary ms-2"
+                  onClick={() => {
+                    temp = { ...pro };
+                    delete temp.photo;
+                    setCard([...card, temp]);
+                    toast.success("Item added");
+                    localStorage.setItem(
+                      "card",
+                      JSON.stringify([...card, temp])
+                    );
+                  }}
+                >
+                  Add to Card
+                </button>
               </div>
             </div>
           );

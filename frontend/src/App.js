@@ -30,6 +30,7 @@ import Category from "./pages/Category";
 import { CardProvider } from "./context/cardContext";
 import Card from "./pages/Card";
 import AdminOrders from "./pages/admin/AdminOrders";
+import Payment from "./pages/Payment";
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
                 <Route path="user/profile" element={<Profile />}></Route>
               </Route>
               <Route path="/about" element={<About />}></Route>
+              <Route path="/payment/:id" element={<Payment />}></Route>
               <Route path="/contect" element={<Contect />}></Route>
               <Route path="/policy" element={<Policy />}></Route>
               <Route path="/signup" element={<Resister />}></Route>

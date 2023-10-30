@@ -11,7 +11,7 @@ const Order = () => {
   const getOrders = async () => {
     try {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/api/v1/auth/orders`
+        `${process.env.REACT_APP_BASE_URL}/api/v1/auth/orders/${auth.user?._id}`
       );
       console.log(data, data.orders);
       setOrders(data.orders);
@@ -21,6 +21,7 @@ const Order = () => {
   };
 
   useEffect(() => {
+    console.log(auth);
     if (auth?.token) getOrders();
   }, [auth?.token]);
 
@@ -33,33 +34,32 @@ const Order = () => {
         <div className="col-md-9">
           <div className="card w-75 p-3">
             <h4> All Orders</h4>
-            {orders?.map((order, index) => {
-              return (
-                <table className="border shadow">
-                  <div className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Buyer</th>
-                        <th scope="col">Orders</th>
-                        <th scope="col">Quantity</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{index + 1}</td>
-                        <td>{order?.status}</td>
-                        <td>{order?.buyer?.name}</td>
-                        <td>{moment(order?.date).fromNow()}</td>
-                        <td>{order?.payment.success ? "Success" : "Failed"}</td>
-                        <td>{order?.payments?.length}</td>
-                      </tr>
-                    </tbody>
-                  </div>
-                </table>
-              );
-            })}
+            <table className="border table">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Buyer</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Orders</th>
+                  <th scope="col">Quantity</th>
+                </tr>
+              </thead>
+              {orders?.map((order, index) => {
+                return (
+                  <tbody key={index}>
+                    <tr>
+                      <td>{index + 1}</td>
+                      <td>{order?.status}</td>
+                      <td>{order?.buyer?.name}</td>
+                      <td>{moment(order?.date).fromNow()}</td>
+                      <td>{order?.payment.success ? "Success" : "Failed"}</td>
+                      <td>{order?.products?.length}</td>
+                    </tr>
+                  </tbody>
+                );
+              })}
+            </table>
           </div>
         </div>
       </div>

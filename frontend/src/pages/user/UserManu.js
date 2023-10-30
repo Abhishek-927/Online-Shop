@@ -1,7 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const UserManu = () => {
+  const location = useLocation();
   return (
     <div>
       <div className="text-center">
@@ -9,13 +10,17 @@ const UserManu = () => {
         <div className="list-group">
           <Link
             to="/dashboard/user/profile"
-            className="list-group-item list-group-item-action"
+            className={`list-group-item list-group-item-action ${
+              location.pathname === "/dashboard/user/profile" ? "active" : ""
+            }`}
           >
-            Profile
+            Update Profile
           </Link>
           <Link
             to="/dashboard/user/order"
-            className="list-group-item list-group-item-action"
+            className={`list-group-item list-group-item-action ${
+              location.pathname === "/dashboard/user/order" ? "active" : ""
+            }`}
           >
             Orders
           </Link>

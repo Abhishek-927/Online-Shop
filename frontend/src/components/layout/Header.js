@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { BiLogoShopify } from "react-icons/bi";
 import { useAuth } from "../../context/auth";
 import { toast } from "react-toastify";
@@ -9,6 +9,7 @@ import { useCard } from "../../context/cardContext";
 import { Badge } from "antd";
 
 const Header = () => {
+  const navigate = useNavigate();
   const { card } = useCard();
   const categories = useCategory();
   const location = useLocation();
@@ -28,7 +29,13 @@ const Header = () => {
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark ">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
+          <Link
+            className="navbar-brand"
+            to="/"
+            onClick={() => {
+              if (location.pathname === "/") window.location.reload();
+            }}
+          >
             <BiLogoShopify className="header-icon" />
             Online Shop
           </Link>
@@ -43,7 +50,10 @@ const Header = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <div
+            className="collapse navbar-collapse me-3"
+            id="navbarSupportedContent"
+          >
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
               <SearchInput />
               <li className="nav-item ms-4">

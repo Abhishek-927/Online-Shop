@@ -19,7 +19,9 @@
   background-color: #007bff;
   color: #fff;
   padding-block: 10px 15px;
+  margin-top: 40px;
 }
+
 .footer-head div {
   font-size: 1.4rem;
 }
@@ -40,6 +42,7 @@
 .footer-links li :hover {
   color: #555;
 }
+
 /* About page style */
 
 .about-head {
@@ -140,7 +143,7 @@
 
 .home-page {
   text-align: center;
-  padding: 20px;
+  padding: 0 20px;
 }
 
 .text-align-start {
@@ -196,4 +199,50 @@
   height: 280px;
   width: 350px;
   object-fit: cover;
+  border-radius: 5px;
+}
+
+.card-desc {
+  padding-top: 25px;
+  text-align: center;
+}
+
+/* category style */
+
+.category-btn {
+  font-size: 1.7rem;
+  padding: 10px 20px;
+}
+
+.big-p {
+  font-size: 1.25rem;
+  margin: 0;
+  padding: 0;
+}
+
+.mx-100 {
+  width: 100%;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* payment design  */
+
+.payment-form {
+  max-width: 400px;
+  margin: 1.5rem auto 0;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.payment-form button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }

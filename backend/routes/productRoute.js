@@ -1,4 +1,6 @@
 const express = require("express");
+const formidable = require("express-formidable");
+
 const { signinRequired, isAdmin } = require("../middlewares/authMiddle");
 const {
   createProductController,
@@ -16,7 +18,6 @@ const {
   braintreeTokenController,
   braintreePatmentController,
 } = require("../controllers/productController");
-const formidable = require("express-formidable");
 
 const router = express.Router();
 
@@ -61,12 +62,13 @@ router.post("/product-filter", productFilterController);
 //product count
 router.get("/product-count", productCountController);
 
-//product per page
+//product per page - load more feature
 router.get("/product-list/:page", productListController);
 
-//search product
+//search product - filters
 router.get("/search/:keyword", searchProductController);
 
+//suggetion of similar product
 router.get("/similar-product/:pid/:cid", getSimilarProductController);
 
 //category wise product

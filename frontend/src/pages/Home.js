@@ -16,6 +16,7 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [radio, setRadio] = useState([]);
   const [total, setTotal] = useState(0);
+  let temp = {};
 
   //get total count
   const getTotal = async () => {
@@ -31,7 +32,7 @@ const Home = () => {
     try {
       const { data } = await axios.get(`${base}/api/v1/product/get-product`);
       setProducts(data.products);
-      console.log(data);
+      console.log("dafsdf ", data);
     } catch (error) {
       console.log(error);
       toast.error("getting all categories failed");
@@ -47,6 +48,14 @@ const Home = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const addToCard = (pro) => {
+    temp = { ...pro };
+    delete temp.photo;
+    setCard([...card, temp]);
+    toast.success("Item added");
+    localStorage.setItem("card", JSON.stringify([...card, temp]));
   };
 
   useEffect(() => {
@@ -149,12 +158,7 @@ const Home = () => {
                       <button
                         className="btn btn-secondary ms-2"
                         onClick={() => {
-                          setCard([...card, pro]);
-                          toast.success("Item added");
-                          localStorage.setItem(
-                            "card",
-                            JSON.stringify([...card, pro])
-                          );
+                          addToCard(pro);
                         }}
                       >
                         Add to Card

@@ -7,6 +7,7 @@ const slugify = require("slugify");
 const productModel = require("../models/productModel");
 const categoryModel = require("../models/categoryModel");
 const orderModel = require("../models/orderModel");
+const User = require("../models/User");
 
 let gateway = new braintree.BraintreeGateway({
   environment: braintree.Environment.Sandbox,
@@ -369,6 +370,9 @@ const braintreeTokenController = async (req, res) => {
 //payment
 const braintreePatmentController = async (req, res) => {
   try {
+    const { email } = req.user;
+    const user = await User.findOne({ email });
+    console.log(req.user, user);
     const { card, nonce } = req.body;
     let total = 0;
     card?.map((i) => {
@@ -387,7 +391,10 @@ const braintreePatmentController = async (req, res) => {
           const order = new orderModel({
             products: card,
             payment: result,
-            buyer: req.user._id,
+            buyer: {
+              name: user.name,
+              _id: user._id,
+            },
           });
           await order.save();
           res.json({ ok: true });
@@ -398,6 +405,11 @@ const braintreePatmentController = async (req, res) => {
     );
   } catch (error) {
     console.log(error);
+    res.status(500).json({
+      success: false,
+      msg: "internal server error",
+      error,
+    });
   }
 };
 
