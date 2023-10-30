@@ -1,13 +1,24 @@
 const express = require("express");
-const { signUp, login } = require("../controllers/authController");
+const {
+  signUp,
+  login,
+  updateProfileController,
+  getOrderController,
+  getAllOrderController,
+  orderStatusController,
+  getAllUserController,
+} = require("../controllers/authController");
 const { body } = require("express-validator");
 const { signinRequired, isAdmin } = require("../middlewares/authMiddle");
+const { route } = require("./productRoute");
 
 const router = express.Router();
 
 // ROUTING
 
-//creating new user -  signup
+//User Routes
+
+// 1. creating new user -  signup
 router.post(
   "/createuser",
   [
@@ -27,7 +38,7 @@ router.post(
   signUp
 );
 
-//login user
+// 2. login user
 router.post(
   "/login",
   [
@@ -39,15 +50,36 @@ router.post(
   login
 );
 
-//protected route for user
+// 3. protected route for user
 router.get("/user-auth", signinRequired, (req, res) => {
   res.status(200).json({ ok: true });
 });
 
-//protected route for admin
-
+// 4. protected route for admin
 router.get("/admin-auth", signinRequired, isAdmin, (req, res) => {
   res.status(200).json({ ok: true });
 });
+
+//update profiles
+router.put("/profile-update", signinRequired, updateProfileController);
+
+// 5. get all users
+router.get("/all-users", signinRequired, isAdmin, getAllUserController);
+
+//Orders Routes
+
+//get single order
+router.get("/orders", signinRequired, getOrderController);
+
+//get all orders
+router.get("/all-orders", signinRequired, isAdmin, getAllOrderController);
+
+//order update status
+router.put(
+  "/order-status/:orderId",
+  signinRequired,
+  isAdmin,
+  orderStatusController
+);
 
 module.exports = router;

@@ -4,17 +4,18 @@ import { toast } from "react-toastify";
 import { Checkbox, Radio } from "antd";
 import { prices } from "../components/Prices";
 import { useNavigate } from "react-router-dom";
+import { useCard } from "../context/cardContext";
 
 const base = process.env.REACT_APP_BASE_URL;
 
 const Home = () => {
   const navigate = useNavigate();
+  const { card, setCard } = useCard();
   const [checked, setChecked] = useState([]);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [radio, setRadio] = useState([]);
   const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
 
   //get total count
   const getTotal = async () => {
@@ -64,16 +65,9 @@ const Home = () => {
     setChecked(all);
   };
 
-  useEffect(() => {
-    if (!checked?.length || !radio?.length) getAllProducts();
-    filterProduct();
-    // eslint-disable-next-line
-  }, [checked.length, radio.length]);
-
   //get filter product from backend
   const filterProduct = async () => {
     try {
-      console.log(checked, radio, "in home");
       const { data } = await axios.post(
         `${base}/api/v1/product/product-filter`,
         { checked, radio }
@@ -85,12 +79,12 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (!checked.length || !radio.length) filterProduct();
+    filterProduct();
   }, [checked, radio]);
 
   return (
     <div className="home-page">
-      <h1>Welcome to Our E-commerce Store</h1>
+      <h1 className="my-3">Welcome to Our E-commerce Store</h1>
       <div className="row mt-3">
         <div className="col-md-2">
           <h6 className="text-center">Filter By Category</h6>
@@ -106,8 +100,9 @@ const Home = () => {
               );
             })}
           </div>
+          <hr />
           <h6 className="text-center mt-4">Filter By Prices</h6>
-          <div className="d-flex flex-column">
+          <div className="d-flex flex-column text-align-start">
             <Radio.Group onChange={(e) => setRadio(e.target.value)}>
               {prices?.map((p) => {
                 return (
@@ -118,6 +113,7 @@ const Home = () => {
               })}
             </Radio.Group>
           </div>
+          <hr style={{ marginBottom: "10px" }} />
           <div className="d-flex flex-column">
             <button
               className="btn btn-danger"
@@ -127,23 +123,21 @@ const Home = () => {
             </button>
           </div>
         </div>
-        <div className="col-md-9">
-          <h2 className="text-cetner">All Products</h2>
-          <div className="d-flex flex-wrap">
+        <div className="col-md-10">
+          <div className="d-flex flex-wrap gap-25px">
             {products.map((pro) => {
               return (
-                <div style={{ width: "18rem" }} key={pro._id}>
+                <div key={pro._id}>
                   <div className="card">
                     <img
-                      style={{ width: "18rem" }}
                       src={`${base}/api/v1/product/product-photo/${pro._id}`}
-                      className="card-img-top"
+                      className="card-img-top card-img"
                       alt="product photo"
                     />
                     <div className="card-body">
                       <h5 className="card-title">{pro.name}</h5>
                       <p className="card-text">{pro.description}</p>
-                      <p className="card-text">{pro.price}</p>
+                      <p className="card-text">Price - $ {pro.price}</p>
                       <button
                         className="btn btn-primary"
                         onClick={() => {
@@ -152,7 +146,17 @@ const Home = () => {
                       >
                         More Details
                       </button>
-                      <button className="btn btn-primary ms-1">
+                      <button
+                        className="btn btn-secondary ms-2"
+                        onClick={() => {
+                          setCard([...card, pro]);
+                          toast.success("Item added");
+                          localStorage.setItem(
+                            "card",
+                            JSON.stringify([...card, pro])
+                          );
+                        }}
+                      >
                         Add to Card
                       </button>
                     </div>

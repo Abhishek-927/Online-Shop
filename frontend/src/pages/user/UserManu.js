@@ -8,13 +8,13 @@ const UserManu = () => {
         <h4>User Deshboard</h4>
         <div className="list-group">
           <Link
-            to="/deshboard/user/profile"
+            to="/dashboard/user/profile"
             className="list-group-item list-group-item-action"
           >
             Profile
           </Link>
           <Link
-            to="/deshboard/user/order"
+            to="/dashboard/user/order"
             className="list-group-item list-group-item-action"
           >
             Orders

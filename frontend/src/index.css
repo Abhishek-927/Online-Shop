@@ -143,6 +143,14 @@
   padding: 20px;
 }
 
+.text-align-start {
+  text-align: start;
+}
+
+.gap-25px {
+  gap: 25px;
+}
+
 .features {
   display: flex;
   justify-content: space-between;
@@ -181,4 +189,11 @@
 .not-found p {
   font-size: 18px;
   margin-top: 10px;
+}
+
+/* card design  */
+.card-img {
+  height: 280px;
+  width: 350px;
+  object-fit: cover;
 }

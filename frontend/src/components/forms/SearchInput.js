@@ -21,6 +21,7 @@ const SearchInput = () => {
       console.log(error);
     }
   };
+
   return (
     <div>
       <form className="d-flex" onSubmit={handleSubmit}>

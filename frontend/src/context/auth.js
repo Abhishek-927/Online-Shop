@@ -14,6 +14,7 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const data = localStorage.getItem("token");
+    console.log("sddf", auth);
     if (data) {
       const parseData = JSON.parse(data);
       setAuth({

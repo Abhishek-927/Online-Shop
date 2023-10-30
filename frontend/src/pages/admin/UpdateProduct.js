@@ -30,7 +30,6 @@ const UpdateProduct = () => {
         `${base}/api/v1/product/single-product/${params.slug}`
       );
       setid(data.product._id);
-      console.log("id is ", id);
       setFormData({
         ...formData,
         name: data.product.name,
@@ -69,7 +68,7 @@ const UpdateProduct = () => {
       productData.append("price", formData.price);
       productData.append("quantity", formData.quantity);
       formData.photo && productData.append("photo", formData.photo);
-      productData.append("category", formData.category?._id);
+      productData.append("category", formData.category);
       productData.append("shipping", formData.shipping);
 
       const { data } = await axios.put(
@@ -88,6 +87,7 @@ const UpdateProduct = () => {
       toast.error("error which create product");
     }
   };
+
   const handleDeleteProduct = async (e) => {
     let answer = window.prompt("Are you Sure to delete this product");
     if (!answer) return;
@@ -168,7 +168,7 @@ const UpdateProduct = () => {
                     <img
                       src={URL.createObjectURL(formData.photo)}
                       alt="product photo"
-                      className="img img-responsive"
+                      className="img img-responsive card-img"
                     />
                   </div>
                 ) : (
@@ -176,7 +176,7 @@ const UpdateProduct = () => {
                     <img
                       src={`${base}/api/v1/product/product-photo/${id}`}
                       alt="product photo"
-                      className="img img-responsive"
+                      className="img img-responsive card-img"
                     />
                   </div>
                 )}

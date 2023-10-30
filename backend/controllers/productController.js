@@ -1,7 +1,19 @@
 const { validationResult } = require("express-validator");
-const productModel = require("../models/productModel");
+const braintree = require("braintree");
 const fs = require("fs");
 const slugify = require("slugify");
+
+//file imports
+const productModel = require("../models/productModel");
+const categoryModel = require("../models/categoryModel");
+const orderModel = require("../models/orderModel");
+
+let gateway = new braintree.BraintreeGateway({
+  environment: braintree.Environment.Sandbox,
+  merchantId: process.env.BRAINTREE_MERCHANT_ID,
+  publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+  privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+});
 
 //creating product
 const createProductController = async (req, res) => {
@@ -145,7 +157,7 @@ const updateProductController = async (req, res) => {
         return res.status(401).json({ msg: "quantity required" });
     }
 
-    if (!photo || photo.size > 1000000) {
+    if (photo && photo.size > 1000000) {
       return res.status(401).json({
         msg: "photo is required and At most 1 MB",
       });
@@ -319,6 +331,76 @@ const getSimilarProductController = async (req, res) => {
   }
 };
 
+const productCategoryController = async (req, res) => {
+  try {
+    const category = await categoryModel.findOne({ slug: req.params.slug });
+    const products = await productModel.find({ category }).populate("category");
+
+    res.json({
+      success: true,
+      products,
+      category,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      msg: "error in getting product category",
+      error,
+    });
+  }
+};
+
+//get token
+const braintreeTokenController = async (req, res) => {
+  try {
+    gateway.clientToken.generate({}, function (err, response) {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.send(response);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//payment
+const braintreePatmentController = async (req, res) => {
+  try {
+    const { card, nonce } = req.body;
+    let total = 0;
+    card?.map((i) => {
+      total += i.price;
+    });
+    let newTransection = gateway.transaction.sale(
+      {
+        amount: total,
+        paymentMethodNonce: nonce,
+        options: {
+          submitForSettlement: true,
+        },
+      },
+      async function (error, result) {
+        if (result) {
+          const order = new orderModel({
+            products: card,
+            payment: result,
+            buyer: req.user._id,
+          });
+          await order.save();
+          res.json({ ok: true });
+        } else {
+          res.status(500).send(error);
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   createProductController,
   singleProductController,
@@ -331,4 +413,7 @@ module.exports = {
   productListController,
   searchProductController,
   getSimilarProductController,
+  productCategoryController,
+  braintreeTokenController,
+  braintreePatmentController,
 };

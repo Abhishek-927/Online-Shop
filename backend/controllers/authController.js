@@ -5,6 +5,7 @@ const {
   comparePassword,
   generateToken,
 } = require("../helper/authHelper");
+const orderModel = require("../models/orderModel");
 
 const signUp = async (req, res) => {
   try {
@@ -106,4 +107,125 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signUp, login };
+const updateProfileController = async (req, res) => {
+  try {
+    const { name, address, phone } = req.body;
+    const user = await User.findOne({ email: req.user.email });
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      {
+        name: name || user.name,
+        phone: phone || user.phone,
+        address: address || user.address,
+      },
+      { new: true }
+    );
+
+    res.json({
+      success: true,
+      msg: "update success",
+      updatedUser,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: "Internal server error while updating",
+      error: error,
+    });
+  }
+};
+
+const getOrderController = async (req, res) => {
+  try {
+    const orders = await orderModel
+      .find({ buyer: req.user._id })
+      .populate("products", "-photo")
+      .populate("buyer", "name");
+
+    res.json({
+      success: true,
+      msg: "order get done",
+      orders,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: "Internal server error while getting orders",
+      error: error,
+    });
+  }
+};
+
+const getAllOrderController = async (req, res) => {
+  try {
+    const orders = await orderModel
+      .find({})
+      .populate("products", "-photo")
+      .populate("buyer", "name")
+      .sort({ date: "-1" });
+
+    res.json({
+      success: true,
+      msg: "get all orders done",
+      orders,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: "Internal server error while getting orders",
+      error: error,
+    });
+  }
+};
+
+const orderStatusController = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    const orders = await orderModel.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    );
+
+    res.json({
+      success: true,
+      msg: "get all orders done",
+      orders,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: "Internal server error while updating orders status",
+      error: error,
+    });
+  }
+};
+
+const getAllUserController = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.json({
+      success: true,
+      msg: "get all users success",
+      users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: "Internal server error while get all users",
+      error: error,
+    });
+  }
+};
+
+module.exports = {
+  signUp,
+  login,
+  updateProfileController,
+  getAllUserController,
+  getAllOrderController,
+  getOrderController,
+  orderStatusController,
+};

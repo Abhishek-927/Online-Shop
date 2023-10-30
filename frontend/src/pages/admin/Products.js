@@ -28,7 +28,7 @@ const Products = () => {
 
   return (
     <div>
-      <div className="row">
+      <div className="row my-4">
         <div className="col-md-3">
           <AdminManu />
         </div>
@@ -42,16 +42,16 @@ const Products = () => {
                   key={pro._id}
                   to={`/dashboard/admin/product/${pro.slug}`}
                 >
-                  <div className="card" style={{ width: "18rem" }}>
+                  <div className="card">
                     <img
-                      style={{ width: "18rem" }}
                       src={`${base}/api/v1/product/product-photo/${pro._id}`}
-                      className="card-img-top"
+                      className="card-img-top card-img"
                       alt="product photo"
                     />
                     <div className="card-body">
                       <h5 className="card-title">{pro.name}</h5>
                       <p className="card-text">{pro.description}</p>
+                      <p className="card-text">Price - $ {pro.price}</p>
                     </div>
                   </div>
                 </Link>
