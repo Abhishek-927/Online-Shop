@@ -105,8 +105,8 @@ const Card = () => {
                 </div>
                 <div className="col-md-7 card-desc">
                   <h4>{c.name}</h4>
-                  <p>{c.description}</p>
-                  <p>Price : {c.price}</p>
+                  <p>{c.description.slice(0, 150)}...</p>
+                  <p>Price :- $ {c.price}</p>
                   <button
                     className="btn btn-danger"
                     onClick={() => removeCardItem(c._id)}
@@ -120,7 +120,7 @@ const Card = () => {
         </div>
         <div className="col-md-4 text-center">
           <h4>Card Summary</h4>
-          <p>Total : {totalPrice()}</p>
+          <p>Total :- $ {totalPrice()}</p>
           {auth?.user?.address ? (
             <>
               <div>

@@ -27,7 +27,7 @@ const Search = () => {
                 />
                 <div className="card-body">
                   <h5 className="card-title">{pro.name}</h5>
-                  <p className="card-text">{pro.description}</p>
+                  <p className="card-text">{pro.description.slice(0, 48)}...</p>
                   <p className="card-text">{pro.price}</p>
                   <button className="btn btn-primary">More Details</button>
                   <button className="btn btn-primary ms-1">Add to Card</button>

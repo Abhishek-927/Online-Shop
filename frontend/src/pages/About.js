@@ -17,9 +17,10 @@ const About = () => {
         <section className="team-section">
           <h2>Our Team</h2>
           <ul>
-            <li>John Doe - CEO</li>
-            <li>Jane Smith - COO</li>
-            <li>Michael Johnson - CTO</li>
+            <li>Abhishek Sahu - Founder</li>
+            <li>Tarun Kumar Sahu - CEO</li>
+            <li>Kiran Sahu - CTO</li>
+            <li>Roshani Sahu - COO</li>
           </ul>
         </section>
       </main>

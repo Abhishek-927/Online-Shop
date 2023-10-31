@@ -12,7 +12,6 @@ const AdminDeshboard = () => {
         </div>
         <div className="col-md-9">
           <div className="card w-75 p-3">
-            {console.log(auth.user)}
             <h4> Admin Name : {auth?.user?.name}</h4>
             <h4> Admin Email : {auth?.user?.email}</h4>
             <h4> Admin Phone : {auth?.user?.phone}</h4>

@@ -15,7 +15,6 @@ const signUp = async (req, res) => {
       const { name, email, address, phone, password } = req.body;
       //check user
       const isExist = await User.findOne({ email });
-      console.log(isExist);
       if (isExist && isExist.length !== 0) {
         return res.json({
           success: false,
@@ -70,14 +69,14 @@ const login = async (req, res) => {
       if (!user) {
         return res.status(422).json({
           success: false,
-          msg: "Invalid credentials",
+          msg: "Invalid email or password",
         });
       }
       const isValidPassword = await comparePassword(password, user.password);
       if (!isValidPassword) {
         return res.status(422).json({
           success: false,
-          msg: "Invalid credentials",
+          msg: "Invalid email or password",
         });
       }
       const token = generateToken({ email });

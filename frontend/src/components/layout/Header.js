@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { BiLogoShopify } from "react-icons/bi";
 import { useAuth } from "../../context/auth";
 import { toast } from "react-toastify";
@@ -9,8 +9,7 @@ import { useCard } from "../../context/cardContext";
 import { Badge } from "antd";
 
 const Header = () => {
-  const navigate = useNavigate();
-  const { card } = useCard();
+  const { card, setCard } = useCard();
   const categories = useCategory();
   const location = useLocation();
   const { auth, setAuth } = useAuth();
@@ -21,8 +20,10 @@ const Header = () => {
       user: null,
       token: "",
     });
+    setCard([]);
     toast.success("Logout Done");
     localStorage.removeItem("token");
+    localStorage.removeItem("card");
   };
 
   return (

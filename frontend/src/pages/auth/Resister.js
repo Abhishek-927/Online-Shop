@@ -22,8 +22,11 @@ const Resister = () => {
   };
 
   const handleSubmit = async (e) => {
+    if (formData.password.length < 8) {
+      toast.error("Password At least 8 character");
+      return;
+    }
     e.preventDefault();
-    console.log(formData);
     try {
       const responst = await axios.post(
         `${process.env.REACT_APP_BASE_URL}/api/v1/auth/createuser`,
@@ -37,7 +40,9 @@ const Resister = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Somthing went wrong");
+      toast.error(
+        error?.response?.data?.msg || "Somthing went wrong Try again"
+      );
     }
   };
 
@@ -53,6 +58,7 @@ const Resister = () => {
             onChange={handleChangeInput}
             name="name"
             placeholder="Enter Name"
+            minLength={3}
             required
           />
         </div>
@@ -76,6 +82,8 @@ const Resister = () => {
             onChange={handleChangeInput}
             name="phone"
             placeholder="Enter Phone Number"
+            minLength={10}
+            maxLength={10}
             required
           />
         </div>
@@ -87,6 +95,7 @@ const Resister = () => {
             onChange={handleChangeInput}
             name="address"
             placeholder="Enter Address"
+            minLength={3}
             required
           />
         </div>
@@ -99,6 +108,7 @@ const Resister = () => {
             name="password"
             placeholder="Enter Password"
             required
+            minLength={8}
           />
         </div>
         <div className="text-center">

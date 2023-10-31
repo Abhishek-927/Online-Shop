@@ -50,7 +50,9 @@ const Products = () => {
                     />
                     <div className="card-body">
                       <h5 className="card-title">{pro.name}</h5>
-                      <p className="card-text">{pro.description}</p>
+                      <p className="card-text">
+                        {pro.description.slice(0, 35)}...
+                      </p>
                       <p className="card-text">Price - $ {pro.price}</p>
                     </div>
                   </div>

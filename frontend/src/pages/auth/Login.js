@@ -33,7 +33,6 @@ const Login = () => {
       );
       if (responst.data.success) {
         toast.success("Login Successful");
-        console.log(responst);
         localStorage.setItem("token", JSON.stringify(responst.data));
         setAuth({
           ...auth,
@@ -46,7 +45,7 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Somthing went wrong !!!! DDFSD");
+      toast.error(error?.response?.data?.msg || "Invalid email or password");
     }
   };
 

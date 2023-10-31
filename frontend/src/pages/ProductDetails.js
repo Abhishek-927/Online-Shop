@@ -70,7 +70,7 @@ const ProductDetails = () => {
             <h2 className="text-center mb-3">Product Details</h2>
             <p className="big-p">Name : {product?.name}</p>
             <p className="big-p">Description : {product?.description}</p>
-            <p className="big-p">Price : {product?.price}</p>
+            <p className="big-p">Price : $ {product?.price}</p>
             <p className="big-p">Category : {product?.category.name}</p>
             <div>
               <button

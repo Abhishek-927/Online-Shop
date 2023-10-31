@@ -13,7 +13,6 @@ const Order = () => {
       const { data } = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/auth/orders/${auth.user?._id}`
       );
-      console.log(data, data.orders);
       setOrders(data.orders);
     } catch (error) {
       console.log(error);
@@ -21,7 +20,6 @@ const Order = () => {
   };
 
   useEffect(() => {
-    console.log(auth);
     if (auth?.token) getOrders();
   }, [auth?.token]);
 

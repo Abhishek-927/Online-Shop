@@ -48,7 +48,7 @@ const AdminOrders = () => {
     }
   };
   return (
-    <div>
+    <div className="container-fluid my-3 p-3">
       <div className="row">
         <div className="col-md-3">
           <AdminManu />
@@ -91,7 +91,7 @@ const AdminOrders = () => {
                       <td>{order?.buyer?.name}</td>
                       <td>{moment(order?.date).fromNow()}</td>
                       <td>{order?.payment.success ? "Success" : "Failed"}</td>
-                      <td>{order?.payments?.length}</td>
+                      <td>{order?.products?.length}</td>
                     </tr>
                   </tbody>
                 );

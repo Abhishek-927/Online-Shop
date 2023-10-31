@@ -22,9 +22,6 @@ const createProductController = async (req, res) => {
     const { name, description, price, category, quantity, shipping } =
       req.fields;
     const { photo } = req.files;
-
-    console.log(shipping);
-
     switch (true) {
       case !name:
         return res.status(401).json({ msg: "name required" });
@@ -215,7 +212,6 @@ const deleteProductController = async (req, res) => {
 const productFilterController = async (req, res) => {
   try {
     const { checked, radio } = req.body;
-    console.log("sfsdf", checked, radio);
     let args = {};
     if (checked?.length > 0) {
       args.category = checked;
@@ -372,7 +368,6 @@ const braintreePatmentController = async (req, res) => {
   try {
     const { email } = req.user;
     const user = await User.findOne({ email });
-    console.log(req.user, user);
     const { card, nonce } = req.body;
     let total = 0;
     card?.map((i) => {

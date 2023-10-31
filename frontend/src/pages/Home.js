@@ -5,6 +5,7 @@ import { Checkbox, Radio } from "antd";
 import { prices } from "../components/Prices";
 import { useNavigate } from "react-router-dom";
 import { useCard } from "../context/cardContext";
+import SpinnerOnly from "../components/SpinnerOnly";
 
 const base = process.env.REACT_APP_BASE_URL;
 
@@ -16,6 +17,7 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [radio, setRadio] = useState([]);
   const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
   let temp = {};
 
   //get total count
@@ -41,11 +43,14 @@ const Home = () => {
 
   const getAllCategory = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.get(
         `${base}/api/v1/category/get-categories`
       );
       setCategories(data.allCategories);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -77,13 +82,16 @@ const Home = () => {
   //get filter product from backend
   const filterProduct = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.post(
         `${base}/api/v1/product/product-filter`,
         { checked, radio }
       );
       setProducts(data?.product);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -133,42 +141,48 @@ const Home = () => {
           </div>
         </div>
         <div className="col-md-10">
-          <div className="d-flex flex-wrap gap-25px">
-            {products.map((pro) => {
-              return (
-                <div key={pro._id}>
-                  <div className="card">
-                    <img
-                      src={`${base}/api/v1/product/product-photo/${pro._id}`}
-                      className="card-img-top card-img"
-                      alt="product photo"
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title">{pro.name}</h5>
-                      <p className="card-text">{pro.description}</p>
-                      <p className="card-text">Price - $ {pro.price}</p>
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => {
-                          navigate(`/product/${pro.slug}`);
-                        }}
-                      >
-                        More Details
-                      </button>
-                      <button
-                        className="btn btn-secondary ms-2"
-                        onClick={() => {
-                          addToCard(pro);
-                        }}
-                      >
-                        Add to Card
-                      </button>
+          {loading ? (
+            <SpinnerOnly />
+          ) : (
+            <div className="d-flex flex-wrap gap-25px">
+              {products.map((pro) => {
+                return (
+                  <div key={pro._id}>
+                    <div className="card">
+                      <img
+                        src={`${base}/api/v1/product/product-photo/${pro._id}`}
+                        className="card-img-top card-img"
+                        alt="product photo"
+                      />
+                      <div className="card-body">
+                        <h5 className="card-title">{pro.name}</h5>
+                        <p className="card-text">
+                          {pro.description.slice(0, 35)}...
+                        </p>
+                        <p className="card-text">Price - $ {pro.price}</p>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => {
+                            navigate(`/product/${pro.slug}`);
+                          }}
+                        >
+                          More Details
+                        </button>
+                        <button
+                          className="btn btn-secondary ms-2"
+                          onClick={() => {
+                            addToCard(pro);
+                          }}
+                        >
+                          Add to Card
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </div>

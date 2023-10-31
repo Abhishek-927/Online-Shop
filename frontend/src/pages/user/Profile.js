@@ -27,18 +27,15 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData, auth);
     try {
       const { data } = await axios.put(
         `${process.env.REACT_APP_BASE_URL}/api/v1/auth/profile-update`,
         formData
       );
-      console.log("data is ", data);
       if (data.success) {
         let ls = localStorage.getItem("token");
         ls = JSON.parse(ls);
         ls.user = data.updatedUser;
-        console.log("sdf", ls);
         localStorage.setItem("token", JSON.stringify(ls));
         setAuth({ ...auth, user: data?.updatedUser });
         toast.success("success");
@@ -52,7 +49,6 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    console.log(auth);
     if (auth.user) {
       const { email, name, phone, address } = auth?.user;
       setFormData({ ...formData, name, email, phone, address });
