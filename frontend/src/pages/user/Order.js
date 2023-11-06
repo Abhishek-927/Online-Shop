@@ -37,7 +37,7 @@ const Order = () => {
                 <tr>
                   <th scope="col"></th>
                   <th scope="col">Status</th>
-                  <th scope="col">Buyer</th>
+                  <th scope="col">Product</th>
                   <th scope="col">Date</th>
                   <th scope="col">Orders</th>
                   <th scope="col">Quantity</th>
@@ -49,7 +49,7 @@ const Order = () => {
                     <tr>
                       <td>{index + 1}</td>
                       <td>{order?.status}</td>
-                      <td>{order?.buyer?.name}</td>
+                      <td>{order?.products[0]?.name}</td>
                       <td>{moment(order?.date).fromNow()}</td>
                       <td>{order?.payment.success ? "Success" : "Failed"}</td>
                       <td>{order?.products?.length}</td>

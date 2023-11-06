@@ -112,9 +112,7 @@ const Resister = () => {
           />
         </div>
         <div className="text-center">
-          <button type="submit" className="btn btn-primary">
-            Sign up
-          </button>
+          <button type="submit">Sign up</button>
         </div>
       </form>
     </div>

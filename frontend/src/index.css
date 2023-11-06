@@ -7,9 +7,14 @@
 /* navbar style */
 
 .header-icon {
-  /* margin: 5px; */
-  margin-inline: 5px;
   font-size: 1.7rem;
+  align-items: center;
+  gap: 5px;
+}
+
+.dropdown-menu[data-bs-popper] {
+  left: unset;
+  right: 0;
 }
 
 /* footer style */
@@ -18,7 +23,7 @@
   text-align: center;
   background-color: #007bff;
   color: #fff;
-  padding-block: 10px 15px;
+  padding-block: 10px;
   margin-top: 40px;
 }
 
@@ -47,7 +52,7 @@
 
 .about-head {
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  /* background-color: #f0f0f0; */
   color: #333;
 }
 
@@ -66,18 +71,22 @@
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
-  background-color: #fff;
+  background-color: #f0f0f0;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .about-section {
   margin-bottom: 20px;
-  padding: 20px;
+  padding: 20px 20px 20px 0;
 }
 
 .about-section > h2 {
   font-size: 24px;
   margin-bottom: 10px;
+}
+
+.about-section > p {
+  padding-left: 20px;
 }
 
 /* Style the team list */
@@ -177,6 +186,19 @@
   margin-top: 10px;
 }
 
+.card-text {
+  margin-block: 0.5rem;
+}
+
+.home-heading {
+  text-align: center;
+  margin-block: 0.5rem 1rem;
+}
+
+.header-pagination {
+  margin: 15px auto 0;
+}
+
 /* page not found style  */
 
 .not-found {
@@ -197,9 +219,21 @@
 /* card design  */
 .card-img {
   height: 280px;
-  width: 350px;
+  width: 320px;
   object-fit: cover;
   border-radius: 5px;
+  margin: 10px auto 0;
+  transition: transform 0.3s ease;
+}
+
+.card-header {
+  padding: 0;
+  width: 350px;
+  object-fit: cover;
+}
+
+.card-img :hover {
+  transform: scale(1.07);
 }
 
 .card-desc {
@@ -214,16 +248,25 @@
   padding: 10px 20px;
 }
 
+/* product details design  */
+
 .big-p {
   font-size: 1.25rem;
   margin: 0;
   padding: 0;
 }
 
+.title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-right: 15px;
+}
+
 .mx-100 {
-  width: 100%;
-  font-size: 1.2rem;
-  font-weight: 500;
+  width: 180px;
+  padding-block: 9px;
+  font-weight: 700;
+  font-size: 1.1rem;
 }
 
 /* payment design  */
@@ -245,4 +288,80 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+/* policy style */
+
+.policy-container {
+  max-width: 600px;
+  margin: 15px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.policy-container h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.policy-container p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* contact us design  */
+
+.contact-us-container {
+  max-width: 600px;
+  margin: 15px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.contact-us-container h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.form-group > input[type="text"],
+.form-group > input[type="email"],
+.form-group > textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+.flex-wrap {
+  flex-wrap: wrap !important;
+  justify-content: center;
+}
+/* media quries  */
+
+@media only screen and (max-width: 600px) {
+  .card-header {
+    width: 308px;
+  }
+  .card-img {
+    width: 285px;
+  }
+  .col-md-10 {
+    margin-top: 15px;
+  }
 }

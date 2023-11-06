@@ -74,6 +74,7 @@ const Card = () => {
       console.log(error);
     }
   };
+
   return (
     <div className="container">
       <div className="row">
@@ -82,11 +83,11 @@ const Card = () => {
             {`Hello ${auth?.token && auth?.user?.name}`}
           </h2>
           <h5 className="text-center">
-            {card?.length > 0
-              ? `You have ${card.length} items in your cart ${
-                  auth.token ? "" : "please login to checkout"
-                }`
-              : "Your cart is empty"}
+            {auth?.token && auth?.user
+              ? card?.length > 0
+                ? `You have ${card.length} items in your cart `
+                : "Your cart is empty"
+              : "Please Login To Continue"}
           </h5>
         </div>
       </div>

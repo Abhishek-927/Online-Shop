@@ -2,7 +2,7 @@ import React from "react";
 import UserManu from "./UserManu";
 import { useAuth } from "../../context/auth";
 
-const Deshboard = () => {
+const Dashboard = () => {
   const { auth } = useAuth();
   return (
     <div className="container-fluid my-3 p-3">
@@ -22,4 +22,4 @@ const Deshboard = () => {
   );
 };
 
-export default Deshboard;
+export default Dashboard;

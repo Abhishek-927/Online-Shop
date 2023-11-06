@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { useCard } from "../context/cardContext";
 import SpinnerOnly from "../components/SpinnerOnly";
+import { useCard } from "../context/cardContext";
+import { useAuth } from "../context/auth";
 
 const base = process.env.REACT_APP_BASE_URL;
 
 const Category = () => {
   const navigate = useNavigate();
-  const { card, setCard } = useCard();
+  const { addToCard } = useCard();
+  const { auth } = useAuth();
   const params = useParams();
   const [category, setCategory] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  let temp = {};
 
   const getProductViaCategory = async () => {
     try {
@@ -72,14 +72,7 @@ const Category = () => {
                     <button
                       className="btn btn-secondary ms-2"
                       onClick={() => {
-                        temp = { ...pro };
-                        delete temp.photo;
-                        setCard([...card, temp]);
-                        toast.success("Item added");
-                        localStorage.setItem(
-                          "card",
-                          JSON.stringify([...card, temp])
-                        );
+                        auth?.user ? addToCard(pro) : navigate("/login");
                       }}
                     >
                       Add to Card

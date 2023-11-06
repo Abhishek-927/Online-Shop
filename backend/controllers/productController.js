@@ -368,11 +368,13 @@ const braintreePatmentController = async (req, res) => {
   try {
     const { email } = req.user;
     const user = await User.findOne({ email });
-    const { card, nonce } = req.body;
+    const { card, selectedProduct, nonce } = req.body;
     let total = 0;
-    card?.map((i) => {
-      total += i.price;
-    });
+    card
+      ? card.map((i) => {
+          total += i.price;
+        })
+      : (total = selectedProduct.price);
     let newTransection = gateway.transaction.sale(
       {
         amount: total,
@@ -384,7 +386,7 @@ const braintreePatmentController = async (req, res) => {
       async function (error, result) {
         if (result) {
           const order = new orderModel({
-            products: card,
+            products: card ? card : selectedProduct,
             payment: result,
             buyer: {
               name: user.name,

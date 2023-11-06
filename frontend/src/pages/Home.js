@@ -3,43 +3,24 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Checkbox, Radio } from "antd";
 import { prices } from "../components/Prices";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCard } from "../context/cardContext";
 import SpinnerOnly from "../components/SpinnerOnly";
+import { useAuth } from "../context/auth";
 
 const base = process.env.REACT_APP_BASE_URL;
 
 const Home = () => {
   const navigate = useNavigate();
-  const { card, setCard } = useCard();
+  const { auth } = useAuth();
+  const { addToCard } = useCard();
   const [checked, setChecked] = useState([]);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [radio, setRadio] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
-  let temp = {};
-
-  //get total count
-  const getTotal = async () => {
-    try {
-      const { data } = await axios.get(`${base}/api/v1/product/product-count`);
-      setTotal(data?.count);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getAllProducts = async () => {
-    try {
-      const { data } = await axios.get(`${base}/api/v1/product/get-product`);
-      setProducts(data.products);
-      console.log("dafsdf ", data);
-    } catch (error) {
-      console.log(error);
-      toast.error("getting all categories failed");
-    }
-  };
+  const [page, setPage] = useState(1);
 
   const getAllCategory = async () => {
     try {
@@ -55,17 +36,8 @@ const Home = () => {
     }
   };
 
-  const addToCard = (pro) => {
-    temp = { ...pro };
-    delete temp.photo;
-    setCard([...card, temp]);
-    toast.success("Item added");
-    localStorage.setItem("card", JSON.stringify([...card, temp]));
-  };
-
   useEffect(() => {
     getAllCategory();
-    getTotal();
   }, []);
 
   //handle filter for checkbox/category
@@ -101,9 +73,9 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      <h1 className="my-3">Welcome to Our E-commerce Store</h1>
+      <h1 className="home-heading">Welcome to Our E-commerce Store</h1>
       <div className="row mt-3">
-        <div className="col-md-2">
+        <div className="col-md-2" style={{ borderRight: "1px solid #999" }}>
           <h6 className="text-center">Filter By Category</h6>
           <div className="d-flex flex-column">
             {categories?.map((c) => {
@@ -145,19 +117,21 @@ const Home = () => {
             <SpinnerOnly />
           ) : (
             <div className="d-flex flex-wrap gap-25px">
-              {products.map((pro) => {
+              {products.slice((page - 1) * 9, page * 9).map((pro) => {
                 return (
                   <div key={pro._id}>
-                    <div className="card">
-                      <img
-                        src={`${base}/api/v1/product/product-photo/${pro._id}`}
-                        className="card-img-top card-img"
-                        alt="product photo"
-                      />
+                    <div className="card card-header">
+                      <Link className="card-img" to={`/product/${pro.slug}`}>
+                        <img
+                          src={`${base}/api/v1/product/product-photo/${pro._id}`}
+                          className="card-img-top card-img"
+                          alt="product photo"
+                        />
+                      </Link>
                       <div className="card-body">
                         <h5 className="card-title">{pro.name}</h5>
                         <p className="card-text">
-                          {pro.description.slice(0, 35)}...
+                          {pro.description.slice(0, 75)}...
                         </p>
                         <p className="card-text">Price - $ {pro.price}</p>
                         <button
@@ -171,7 +145,7 @@ const Home = () => {
                         <button
                           className="btn btn-secondary ms-2"
                           onClick={() => {
-                            addToCard(pro);
+                            auth?.user ? addToCard(pro) : navigate("/login");
                           }}
                         >
                           Add to Card
@@ -182,6 +156,48 @@ const Home = () => {
                 );
               })}
             </div>
+          )}
+          {products.length === 0 ? (
+            <h4 className="text-center">Not Found Any Product</h4>
+          ) : (
+            <nav aria-label="Page navigation example">
+              <ul className="pagination justify-content-center mt-4">
+                <li className="page-item">
+                  <button
+                    className="page-link"
+                    onClick={() => setPage(page - 1)}
+                    disabled={page <= 1}
+                  >
+                    Previous
+                  </button>
+                </li>
+                {(() => {
+                  const rows = [];
+                  for (let i = 0; i < products.length / 9; i++) {
+                    rows.push(
+                      <li className="page-item" key={i}>
+                        <button
+                          className="page-link"
+                          onClick={() => setPage(i + 1)}
+                        >
+                          {i + 1}
+                        </button>
+                      </li>
+                    );
+                  }
+                  return rows;
+                })()}
+                <li className="page-item">
+                  <button
+                    className="page-link"
+                    onClick={() => setPage(page + 1)}
+                    disabled={page > products.length / 9}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
           )}
         </div>
       </div>

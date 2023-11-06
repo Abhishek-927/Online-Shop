@@ -1,13 +1,19 @@
 import React from "react";
 import { useSearch } from "../context/searchContext";
+import { useAuth } from "../context/auth";
+import { useNavigate } from "react-router-dom";
+import { useCard } from "../context/cardContext";
 
 const base = process.env.REACT_APP_BASE_URL;
 
 const Search = () => {
   const { values, setvalues } = useSearch();
+  const { auth } = useAuth();
+  const { addToCard } = useCard();
+  const navigate = useNavigate();
 
   return (
-    <div className="text-center">
+    <div className="text-center container">
       <h2>Search Result</h2>
       <h5>
         {values.results.length < 1
@@ -28,9 +34,23 @@ const Search = () => {
                 <div className="card-body">
                   <h5 className="card-title">{pro.name}</h5>
                   <p className="card-text">{pro.description.slice(0, 48)}...</p>
-                  <p className="card-text">{pro.price}</p>
-                  <button className="btn btn-primary">More Details</button>
-                  <button className="btn btn-primary ms-1">Add to Card</button>
+                  <p className="card-text">Price : $ {pro.price}</p>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      navigate(`/product/${pro.slug}`);
+                    }}
+                  >
+                    More Details
+                  </button>
+                  <button
+                    className="btn btn-secondary ms-2"
+                    onClick={() => {
+                      auth?.user ? addToCard(pro) : navigate("/login");
+                    }}
+                  >
+                    Add to Card
+                  </button>
                 </div>
               </div>
             </div>

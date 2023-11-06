@@ -15,7 +15,6 @@ const AdminOrders = () => {
     "Deliverd",
     "Cancel",
   ]);
-  const [changeStatus, setChangeStatus] = useState("");
 
   const { auth } = useAuth();
   const [orders, setOrders] = useState([]);
@@ -25,7 +24,6 @@ const AdminOrders = () => {
       const { data } = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/auth/all-orders`
       );
-      console.log(data, data.orders);
       setOrders(data.orders);
     } catch (error) {
       console.log(error);
@@ -63,6 +61,7 @@ const AdminOrders = () => {
                   <th scope="col">#</th>
                   <th scope="col">Status</th>
                   <th scope="col">Buyer</th>
+                  <th scope="col">Item</th>
                   <th scope="col">Orders</th>
                   <th scope="col">Status</th>
                   <th scope="col">Quantity</th>
@@ -73,7 +72,7 @@ const AdminOrders = () => {
                   <tbody key={index}>
                     <tr>
                       <td>{index + 1}</td>
-                      <td>
+                      <td style={{ width: "200px" }}>
                         <Select
                           bordered={false}
                           onChange={(value) => handleChange(order._id, value)}
@@ -88,7 +87,8 @@ const AdminOrders = () => {
                           })}
                         </Select>
                       </td>
-                      <td>{order?.buyer?.name}</td>
+                      <td>{order?.buyer?.email}</td>
+                      <td>{order?.products[0]?.name}</td>
                       <td>{moment(order?.date).fromNow()}</td>
                       <td>{order?.payment.success ? "Success" : "Failed"}</td>
                       <td>{order?.products?.length}</td>

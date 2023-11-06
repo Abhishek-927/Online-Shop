@@ -2,7 +2,7 @@ import React from "react";
 import AdminManu from "../../components/layout/AdminManu";
 import { useAuth } from "../../context/auth";
 
-const AdminDeshboard = () => {
+const AdminDashboard = () => {
   const { auth } = useAuth();
   return (
     <div className="container-fluid my-3 p-3">
@@ -22,4 +22,4 @@ const AdminDeshboard = () => {
   );
 };
 
-export default AdminDeshboard;
+export default AdminDashboard;

@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 
 import { useCard } from "../context/cardContext";
 import { useAuth } from "../context/auth";
@@ -9,6 +8,7 @@ import { useAuth } from "../context/auth";
 const base = process.env.REACT_APP_BASE_URL;
 
 const ProductDetails = () => {
+  const { addToCard, setSelectedProduct } = useCard();
   const params = useParams();
   const navigate = useNavigate();
   let temp = null;
@@ -16,15 +16,6 @@ const ProductDetails = () => {
   const [related, setRelated] = useState([]);
 
   const { auth, setTemp } = useAuth();
-  const { card, setCard } = useCard();
-
-  const addToCard = (pro) => {
-    temp = { ...pro };
-    delete temp.photo;
-    setCard([...card, temp]);
-    toast.success("Item added");
-    localStorage.setItem("card", JSON.stringify([...card, temp]));
-  };
 
   const getSingleProduct = async () => {
     try {
@@ -32,8 +23,8 @@ const ProductDetails = () => {
         `${base}/api/v1/product/single-product/${params.slug}`
       );
       setProduct(data.product);
+      setSelectedProduct(data.product);
       getSimilarProduct(data?.product._id, data?.product.category._id);
-      console.log(data.product);
     } catch (error) {
       console.log(error);
     }
@@ -44,7 +35,6 @@ const ProductDetails = () => {
       const { data } = await axios.get(
         `${base}/api/v1/product/similar-product/${pid}/${cid}`
       );
-      console.log("data", data);
       setRelated(data?.products);
     } catch (error) {
       console.log(error);
@@ -58,7 +48,7 @@ const ProductDetails = () => {
   return (
     <div className="container mt-4">
       <div className="row">
-        <div className="col-md-6  d-flex justify-content-center">
+        <div className="col-md-6  d-flex justify-content-center align-items-center">
           <img
             src={`${base}/api/v1/product/product-photo/${product?._id}`}
             className="card-img-top card-img"
@@ -68,15 +58,24 @@ const ProductDetails = () => {
         {product?.name && (
           <div className="col-md-6">
             <h2 className="text-center mb-3">Product Details</h2>
-            <p className="big-p">Name : {product?.name}</p>
-            <p className="big-p">Description : {product?.description}</p>
-            <p className="big-p">Price : $ {product?.price}</p>
-            <p className="big-p">Category : {product?.category.name}</p>
+            <p className="big-p">
+              <span className="title">Name :</span> {product?.name}
+            </p>
+            <p className="big-p">
+              <span className="title">Price : </span> $ {product?.price}
+            </p>
+            <p className="big-p">
+              <span className="title">Description :</span>
+              {product?.description}
+            </p>
+            <p className="big-p">
+              <span className="title">Category :</span> {product?.category.name}
+            </p>
             <div>
               <button
                 className="btn btn-primary my-3 mx-100"
                 onClick={() => {
-                  addToCard(product);
+                  auth?.user ? addToCard(product) : navigate("/login");
                 }}
               >
                 ADD TO CART
@@ -102,20 +101,25 @@ const ProductDetails = () => {
             related.map((pro) => {
               return (
                 <div key={pro._id}>
-                  <div className="card">
-                    <img
-                      src={`${base}/api/v1/product/product-photo/${pro._id}`}
-                      className="card-img-top card-img"
-                      alt="product photo"
-                    />
+                  <div className="card card-header">
+                    <Link className="card-img" to={`/product/${pro.slug}`}>
+                      <img
+                        src={`${base}/api/v1/product/product-photo/${pro._id}`}
+                        className="card-img-top card-img"
+                        alt="product photo"
+                      />
+                    </Link>
                     <div className="card-body">
                       <h5 className="card-title">{pro.name}</h5>
-                      <p className="card-text">{pro.description}</p>
-                      <p className="card-text">{pro.price}</p>
+                      <p className="card-text">
+                        {pro.description.slice(0, 70)}...
+                      </p>
+                      <p className="card-text">Price - $ {pro.price}</p>
                       <button
                         className="btn btn-primary"
                         onClick={() => {
                           navigate(`/product/${pro.slug}`);
+                          window.location.reload();
                         }}
                       >
                         More Details
@@ -123,7 +127,7 @@ const ProductDetails = () => {
                       <button
                         className="btn btn-secondary ms-1"
                         onClick={() => {
-                          addToCard(pro);
+                          auth?.user ? addToCard(pro) : navigate("/login");
                         }}
                       >
                         Add to Card

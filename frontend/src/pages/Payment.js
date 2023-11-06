@@ -11,7 +11,7 @@ const base = process.env.REACT_APP_BASE_URL;
 const Payment = () => {
   const navigate = useNavigate();
   const { auth, temp } = useAuth();
-  const { card, setCard } = useCard();
+  const { selectedProduct } = useCard();
   const [clientToken, setclientToken] = useState("");
   const [instance, setInstance] = useState("");
   const [loading, setLoading] = useState("");
@@ -34,10 +34,11 @@ const Payment = () => {
 
   const handlePayment = async () => {
     try {
+      setLoading(true);
       const { nonce } = await instance.requestPaymentMethod();
       const { data } = await axios.post(
         `${base}/api/v1/product/braintree/payment`,
-        { nonce, card }
+        { nonce, selectedProduct }
       );
       setLoading(false);
       toast.success("payment done successfully");
@@ -69,7 +70,7 @@ const Payment = () => {
               className="btn btn-warning"
               onClick={() => {
                 navigate("/login", {
-                  state: "/card",
+                  state: `/payment/${temp._id}`,
                 });
               }}
             >
@@ -78,7 +79,7 @@ const Payment = () => {
           </>
         )}
         <div className="mt-2">
-          {!clientToken || !card?.length ? (
+          {!clientToken || !auth?.user ? (
             ""
           ) : (
             <>

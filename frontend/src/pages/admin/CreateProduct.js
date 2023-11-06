@@ -22,6 +22,7 @@ const CreateProduct = () => {
     shipping: false,
   });
   const [photo, setPhoto] = useState("");
+
   //get all category
   const getAllCategory = async () => {
     try {
@@ -47,7 +48,6 @@ const CreateProduct = () => {
       productData.append("quantity", formData.quantity);
       productData.append("photo", photo);
       productData.append("shipping", formData.shipping);
-      console.log(formData);
       productData.append("category", formData.category);
 
       const { data } = await axios.post(
@@ -56,7 +56,6 @@ const CreateProduct = () => {
       );
 
       if (data.success) {
-        console.log(data, formData);
         toast.success(data.msg);
         setLoading(false);
         navigate("/dashboard/admin/products");

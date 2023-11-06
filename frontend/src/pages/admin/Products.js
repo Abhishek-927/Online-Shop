@@ -14,7 +14,6 @@ const Products = () => {
     try {
       const { data } = await axios.get(`${base}/api/v1/product/get-product`);
       setProduct(data.products);
-      console.log(data);
     } catch (error) {
       console.log(error);
       toast.error("getting all categories failed");

@@ -10,7 +10,6 @@ const useCategory = () => {
       const { data } = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/category/get-categories`
       );
-      console.log(data);
       setCategories(data.allCategories);
     } catch (error) {
       console.log(error);

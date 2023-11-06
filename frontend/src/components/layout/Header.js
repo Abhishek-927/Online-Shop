@@ -37,8 +37,10 @@ const Header = () => {
               if (location.pathname === "/") window.location.reload();
             }}
           >
-            <BiLogoShopify className="header-icon" />
-            Online Shop
+            <div className="d-flex header-icon">
+              <BiLogoShopify className="header-icon" />
+              Online Shop
+            </div>
           </Link>
           <button
             className="navbar-toggler"
