@@ -36,8 +36,21 @@ const Home = () => {
     }
   };
 
+  const getAllProduct = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(`${base}/api/v1/product/get-product`);
+      setProducts(data?.products);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getAllCategory();
+    getAllProduct();
   }, []);
 
   //handle filter for checkbox/category
@@ -59,6 +72,7 @@ const Home = () => {
         `${base}/api/v1/product/product-filter`,
         { checked, radio }
       );
+      console.log(data);
       setProducts(data?.product);
       setLoading(false);
     } catch (error) {
